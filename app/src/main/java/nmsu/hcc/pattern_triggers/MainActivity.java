@@ -2,6 +2,7 @@ package nmsu.hcc.pattern_triggers;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -15,7 +16,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnOpenApplication).setOnClickListener(view -> {
             //LaunchApplicationHelper.openApplication(MainActivity.this, "com.sec.android.app.camera");
             //LaunchApplicationHelper.openApplication(MainActivity.this, LaunchApplicationHelper.getCameraPackageName(MainActivity.this));
-            LaunchApplicationHelper.switchFlashLight(MainActivity.this, true);
+            //LaunchApplicationHelper.switchFlashLight(MainActivity.this, true);
+            startActivity(new Intent(MainActivity.this, DrawPatternActivity.class));
         });
 
         findViewById(R.id.btnTurnOffTorch).setOnClickListener(view -> {
