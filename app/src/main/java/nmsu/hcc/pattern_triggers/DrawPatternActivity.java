@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +34,7 @@ public class DrawPatternActivity extends ImageActivity {
 
     DrawingView drawingView;
     ImageView imageView;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +42,37 @@ public class DrawPatternActivity extends ImageActivity {
         setContentView(R.layout.activity_draw_pattern);
 
         imageView = findViewById(R.id.ivPatternImage);
+        textView = findViewById(R.id.tvParsedText);
         drawingView = findViewById(R.id.llCanvas);
         drawingView.getLatestBitmapImage(new LatestBitmapImageListener() {
             @Override
             public void latestBitmapImage(Bitmap imageBitmap) {
                 Log.e("latestBitmapImage", "bytes: "+String.valueOf(imageBitmap.getByteCount()));
                 Log.e("latestBitmapImage", "height: "+String.valueOf(imageBitmap.getHeight()));
-                imageView.setImageBitmap(Bitmap.createScaledBitmap(
-                        imageBitmap, 512, 512, false));
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(imageBitmap, 1024, 764, false);
+                imageView.setImageBitmap(scaledBitmap);
+
+                InputImage image = InputImage.fromBitmap(scaledBitmap, 0);
+                TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
+                Task<Text> result = recognizer.process(image)
+                        .addOnSuccessListener(new OnSuccessListener<Text>() {
+                            @Override
+                            public void onSuccess(Text visionText) {
+                                // Task completed successfully
+                                // ...
+                                Log.e("Parsed Text", "Parsed Text: "+visionText.getText());
+                                textView.setText(visionText.getText());
+                            }
+                        })
+                        .addOnFailureListener(
+                                new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Task failed with an exception
+                                        // ...
+                                        Log.e("Parsed Text", String.valueOf(e));
+                                    }
+                                });
             }
         });
 
@@ -64,6 +89,7 @@ public class DrawPatternActivity extends ImageActivity {
                                             // Task completed successfully
                                             // ...
                                             Log.e("Parsed Text", "Parsed Text: "+visionText.getText());
+                                            textView.setText(visionText.getText());
                                         }
                                     })
                                     .addOnFailureListener(
