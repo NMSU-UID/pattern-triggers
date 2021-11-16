@@ -11,17 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.google.mlkit.common.MlKitException;
-import com.google.mlkit.common.model.DownloadConditions;
-import com.google.mlkit.common.model.RemoteModelManager;
-import com.google.mlkit.vision.digitalink.DigitalInkRecognition;
-import com.google.mlkit.vision.digitalink.DigitalInkRecognitionModel;
-import com.google.mlkit.vision.digitalink.DigitalInkRecognitionModelIdentifier;
-import com.google.mlkit.vision.digitalink.DigitalInkRecognizer;
-import com.google.mlkit.vision.digitalink.DigitalInkRecognizerOptions;
-import com.google.mlkit.vision.digitalink.Ink;
-
-public class DrawingView extends View {
+public class DrawingViewBackup extends View {
 
     public int width;
     public  int height;
@@ -36,28 +26,16 @@ public class DrawingView extends View {
 
     LatestBitmapImageListener latestBitmapImageListener;
 
-    Ink.Builder inkBuilder = Ink.builder();
-    Ink.Stroke.Builder strokeBuilder;
-    Ink ink;
-
-    DigitalInkRecognitionModelIdentifier modelIdentifier = null;
-    DigitalInkRecognitionModel model;
-    DigitalInkRecognizer recognizer;
-
-    ParsedTextListener parsedTextListener;
-
-    RemoteModelManager remoteModelManager = RemoteModelManager.getInstance();
-
-    public DrawingView(Context c) {
+    public DrawingViewBackup(Context c) {
         super(c, null);
     }
 
-    public DrawingView(Context c, AttributeSet attrs) {
+    public DrawingViewBackup(Context c, AttributeSet attrs) {
         super(c, attrs);
         initiate();
     }
 
-    public DrawingView(Context c, AttributeSet attrs, int defStyle) {
+    public DrawingViewBackup(Context c, AttributeSet attrs, int defStyle) {
         super(c, attrs, defStyle);
         initiate();
     }
@@ -83,27 +61,6 @@ public class DrawingView extends View {
         circlePaint.setStrokeWidth(4f);
 
         setDrawingCacheEnabled(true);
-
-        // Specify the recognition model for a language
-        try {
-            modelIdentifier = DigitalInkRecognitionModelIdentifier.fromLanguageTag("en-US");
-        } catch (MlKitException e) {
-            // language tag failed to parse, handle error.
-        }
-
-        model = DigitalInkRecognitionModel.builder(modelIdentifier).build();
-
-        // Get a recognizer for the language
-        recognizer =
-                DigitalInkRecognition.getClient(
-                        DigitalInkRecognizerOptions.builder(model).build());
-
-        remoteModelManager
-                .download(model, new DownloadConditions.Builder().build())
-                .addOnSuccessListener(aVoid -> Log.e("DrawingView", "Model downloaded"))
-                .addOnFailureListener(
-                        e -> Log.e("DrawingView", "Error while downloading a model: " + e));
-
     }
 
     @Override
@@ -163,10 +120,6 @@ public class DrawingView extends View {
         //clearDrawing();
     }
 
-    public void getParsedTextListener(ParsedTextListener parsedTextListener){
-        this.parsedTextListener = parsedTextListener;
-    }
-
     public void clearDrawing() {
         setDrawingCacheEnabled(false);
         onSizeChanged(width, height, width, height);
@@ -185,38 +138,21 @@ public class DrawingView extends View {
                 Log.e("onTouchEvent", "Action Down");
                 touch_start(x, y);
                 invalidate();
-                strokeBuilder = Ink.Stroke.builder();
-                strokeBuilder.addPoint(Ink.Point.create(x, y));
                 break;
             case MotionEvent.ACTION_MOVE:
                 Log.e("onTouchEvent", "Action Move");
                 touch_move(x, y);
                 invalidate();
-                strokeBuilder.addPoint(Ink.Point.create(x, y));
                 break;
             case MotionEvent.ACTION_UP:
                 Log.e("onTouchEvent", "Action Up");
                 touch_up();
-                //Bitmap bitmap = getDrawingCache();
-                //this.latestBitmapImageListener.latestBitmapImage(bitmap);
+                Bitmap bitmap = getDrawingCache();
+                this.latestBitmapImageListener.latestBitmapImage(bitmap);
                 invalidate();
-                //clearDrawing();
-
-                strokeBuilder.addPoint(Ink.Point.create(x, y));
-                inkBuilder.addStroke(strokeBuilder.build());
-                strokeBuilder = null;
+                clearDrawing();
                 break;
         }
-
-        ink = inkBuilder.build();
-        recognizer.recognize(ink)
-                .addOnSuccessListener(result -> {
-                            this.parsedTextListener.parsedText(result.getCandidates().get(0).getText());
-                            ink = null;
-                        })
-                .addOnFailureListener(
-                        e -> Log.e("DrawingView", "Error during recognition: " + e));
-        clearDrawing();
         return true;
     }
 }

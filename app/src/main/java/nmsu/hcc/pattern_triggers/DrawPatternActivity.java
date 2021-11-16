@@ -44,7 +44,14 @@ public class DrawPatternActivity extends ImageActivity {
         imageView = findViewById(R.id.ivPatternImage);
         textView = findViewById(R.id.tvParsedText);
         drawingView = findViewById(R.id.llCanvas);
-        drawingView.getLatestBitmapImage(new LatestBitmapImageListener() {
+        drawingView.getParsedTextListener(new ParsedTextListener() {
+            @Override
+            public void parsedText(String text) {
+                Log.e("Parsed Text", "Parsed Text: "+text);
+                textView.setText(text);
+            }
+        });
+        /*drawingView.getLatestBitmapImage(new LatestBitmapImageListener() {
             @Override
             public void latestBitmapImage(Bitmap imageBitmap) {
                 Log.e("latestBitmapImage", "bytes: "+String.valueOf(imageBitmap.getByteCount()));
@@ -74,7 +81,7 @@ public class DrawPatternActivity extends ImageActivity {
                                     }
                                 });
             }
-        });
+        });*/
 
         findViewById(R.id.btnOpenGallery).setOnClickListener(view -> {
             getImageFromGallery(new ImageGetListener() {
@@ -83,14 +90,11 @@ public class DrawPatternActivity extends ImageActivity {
                     InputImage image = InputImage.fromBitmap(imageBitmap, 0);
                     TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
                     Task<Text> result = recognizer.process(image)
-                                    .addOnSuccessListener(new OnSuccessListener<Text>() {
-                                        @Override
-                                        public void onSuccess(Text visionText) {
-                                            // Task completed successfully
-                                            // ...
-                                            Log.e("Parsed Text", "Parsed Text: "+visionText.getText());
-                                            textView.setText(visionText.getText());
-                                        }
+                                    .addOnSuccessListener(visionText -> {
+                                        // Task completed successfully
+                                        // ...
+                                        Log.e("Parsed Text", "Parsed Text: "+visionText.getText());
+                                        textView.setText(visionText.getText());
                                     })
                                     .addOnFailureListener(
                                             new OnFailureListener() {
