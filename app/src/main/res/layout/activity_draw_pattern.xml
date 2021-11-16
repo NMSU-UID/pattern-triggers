@@ -10,7 +10,17 @@
     <Button
         android:id="@+id/btnOpenGallery"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
+
+    <nmsu.hcc.pattern_triggers.DrawingView
+        android:id="@+id/llCanvas"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" />
+
+    <ImageView
+        android:id="@+id/ivPatternImage"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="20dp"/>
 
 </LinearLayout>
