@@ -7,36 +7,27 @@
     android:orientation="vertical"
     tools:context=".DrawPatternActivity">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnOpenGallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        android:layout_height="match_parent" >
 
         <TextView
-            android:id="@+id/tvParsedText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"/>
+            android:gravity="center"
+            android:textColor="@android:color/darker_gray"
+            android:text="Draw anywhere on the screen"/>
+
+        <nmsu.hcc.pattern_triggers.DrawingView
+            android:id="@+id/llCanvas"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
 
 
-    </LinearLayout>
-
-    <nmsu.hcc.pattern_triggers.DrawingView
-        android:id="@+id/llCanvas"
-        android:layout_width="match_parent"
-        android:layout_height="250dp" />
-
-    <ImageView
-        android:id="@+id/ivPatternImage"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="20dp"/>
 
 </LinearLayout>

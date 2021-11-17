@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,24 +34,22 @@ import java.io.FileNotFoundException;
 public class DrawPatternActivity extends ImageActivity {
 
     DrawingView drawingView;
-    ImageView imageView;
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw_pattern);
 
-        imageView = findViewById(R.id.ivPatternImage);
-        textView = findViewById(R.id.tvParsedText);
         drawingView = findViewById(R.id.llCanvas);
         drawingView.getParsedTextListener(new ParsedTextListener() {
             @Override
             public void parsedText(String text) {
-                Log.e("Parsed Text", "Parsed Text: "+text);
-                textView.setText(text);
+                Log.e("DrawPatternActivity", "Parsed Text: "+text);
+                takeAction(text);
+                finish();
             }
         });
+
         /*drawingView.getLatestBitmapImage(new LatestBitmapImageListener() {
             @Override
             public void latestBitmapImage(Bitmap imageBitmap) {
@@ -81,7 +80,7 @@ public class DrawPatternActivity extends ImageActivity {
                                     }
                                 });
             }
-        });*/
+        });
 
         findViewById(R.id.btnOpenGallery).setOnClickListener(view -> {
             getImageFromGallery(new ImageGetListener() {
@@ -115,6 +114,29 @@ public class DrawPatternActivity extends ImageActivity {
             });
         });
 
+         */
+
+    }
+
+    private void takeAction(String s){
+        switch (s) {
+            case "M":
+                LaunchApplicationHelper.switchFlashLight(this, true);
+                break;
+            case "N":
+                LaunchApplicationHelper.switchFlashLight(this, false);
+                break;
+            case "B":
+                LaunchApplicationHelper.openApplication(this, "com.android.chrome");
+                break;
+            case "V":
+            case "v":
+                LaunchApplicationHelper.openApplication(this, "com.google.android.youtube");
+                break;
+            default:
+                Toast.makeText(this, "Did not matched with anything", Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 
 }
