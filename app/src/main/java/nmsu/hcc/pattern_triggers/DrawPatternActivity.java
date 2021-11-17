@@ -128,10 +128,12 @@ public class DrawPatternActivity extends ImageActivity {
                 break;
             case "B":
                 LaunchApplicationHelper.openApplication(this, "com.android.chrome");
+                //LaunchApplicationHelper.launchApp(this, "com.android.chrome");
                 break;
             case "V":
             case "v":
                 LaunchApplicationHelper.openApplication(this, "com.google.android.youtube");
+                //LaunchApplicationHelper.launchApp(this, "com.google.android.youtube");
                 break;
             default:
                 Toast.makeText(this, "Did not matched with anything", Toast.LENGTH_LONG).show();
