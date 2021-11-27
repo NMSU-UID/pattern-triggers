@@ -1,35 +1,13 @@
-package nmsu.hcc.pattern_triggers;
+package nmsu.hcc.pattern_triggers.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.text.Text;
-import com.google.mlkit.vision.text.TextRecognition;
-import com.google.mlkit.vision.text.TextRecognizer;
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
-
-import java.io.File;
-import java.io.FileNotFoundException;
+import nmsu.hcc.pattern_triggers.DrawingView;
+import nmsu.hcc.pattern_triggers.LaunchApplicationHelper;
+import nmsu.hcc.pattern_triggers.R;
+import nmsu.hcc.pattern_triggers.listeners.ParsedTextListener;
 
 public class DrawPatternActivity extends ImageActivity {
 

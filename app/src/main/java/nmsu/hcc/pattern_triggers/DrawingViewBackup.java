@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import nmsu.hcc.pattern_triggers.listeners.LatestBitmapImageListener;
+
 public class DrawingViewBackup extends View {
 
     public int width;
