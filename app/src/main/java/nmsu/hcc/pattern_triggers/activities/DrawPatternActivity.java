@@ -22,6 +22,8 @@ public class DrawPatternActivity extends ImageActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        hideToolbar();
         setContentView(R.layout.activity_draw_pattern);
 
         drawingView = findViewById(R.id.llCanvas);
@@ -100,6 +102,13 @@ public class DrawPatternActivity extends ImageActivity {
 
          */
 
+    }
+
+    private void hideToolbar() {
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException ignored){}
     }
 
     private void takeAction(String s){

@@ -7,9 +7,22 @@
     android:orientation="vertical"
     tools:context=".activities.DrawPatternActivity">
 
+    <TextView
+        android:id="@+id/tvSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_gravity="top|end"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        android:text="Settings"/>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="match_parent"
@@ -25,6 +38,7 @@
             android:id="@+id/llCanvas"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
 
     </FrameLayout>
 
