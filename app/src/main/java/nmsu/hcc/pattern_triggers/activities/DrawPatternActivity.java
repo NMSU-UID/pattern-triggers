@@ -1,7 +1,9 @@
 package nmsu.hcc.pattern_triggers.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import nmsu.hcc.pattern_triggers.DrawingView;
@@ -18,6 +20,7 @@ import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_YOUTUBE;
 public class DrawPatternActivity extends ImageActivity {
 
     DrawingView drawingView;
+    TextView tvSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,8 @@ public class DrawPatternActivity extends ImageActivity {
         setContentView(R.layout.activity_draw_pattern);
 
         drawingView = findViewById(R.id.llCanvas);
+        tvSettings = findViewById(R.id.tvSettings);
+
         drawingView.getParsedTextListener(new ParsedTextListener() {
             @Override
             public void parsedText(String text) {
@@ -34,6 +39,10 @@ public class DrawPatternActivity extends ImageActivity {
                 takeAction(text);
                 finish();
             }
+        });
+
+        tvSettings.setOnClickListener(view -> {
+            startActivity(new Intent(DrawPatternActivity.this, SettingsActivity.class));
         });
 
         /*drawingView.getLatestBitmapImage(new LatestBitmapImageListener() {
