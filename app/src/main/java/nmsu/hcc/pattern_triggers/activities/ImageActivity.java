@@ -1,4 +1,4 @@
-package nmsu.hcc.pattern_triggers;
+package nmsu.hcc.pattern_triggers.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -28,6 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import nmsu.hcc.pattern_triggers.listeners.ImageGetListener;
 
 public abstract class ImageActivity extends AppCompatActivity {
 

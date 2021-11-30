@@ -21,6 +21,9 @@ import com.google.mlkit.vision.digitalink.DigitalInkRecognizer;
 import com.google.mlkit.vision.digitalink.DigitalInkRecognizerOptions;
 import com.google.mlkit.vision.digitalink.Ink;
 
+import nmsu.hcc.pattern_triggers.listeners.LatestBitmapImageListener;
+import nmsu.hcc.pattern_triggers.listeners.ParsedTextListener;
+
 public class DrawingView extends View {
 
     public int width;

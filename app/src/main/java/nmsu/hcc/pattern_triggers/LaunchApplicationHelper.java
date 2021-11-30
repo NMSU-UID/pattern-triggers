@@ -1,9 +1,11 @@
 package nmsu.hcc.pattern_triggers;
 
 import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +29,32 @@ public class LaunchApplicationHelper {
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
         if (launchIntent != null) {
             context.startActivity(launchIntent);
+        } else {
+            Toast.makeText(context, "No application", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    // better way, need to investigate if works properly
+    public static void launchApp(Context context, String packageName) {
+        Intent intent = new Intent();
+        intent.setPackage(packageName);
+
+        PackageManager pm = context.getPackageManager();
+        List<ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
+        Collections.sort(resolveInfos, new ResolveInfo.DisplayNameComparator(pm));
+
+        if(resolveInfos.size() > 0) {
+            ResolveInfo launchable = resolveInfos.get(0);
+            ActivityInfo activity = launchable.activityInfo;
+            ComponentName name=new ComponentName(activity.applicationInfo.packageName,
+                    activity.name);
+            Intent i=new Intent(Intent.ACTION_MAIN);
+
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                    Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            i.setComponent(name);
+
+            context.startActivity(i);
         } else {
             Toast.makeText(context, "No application", Toast.LENGTH_LONG).show();
         }
