@@ -6,8 +6,14 @@ import android.widget.Toast;
 
 import nmsu.hcc.pattern_triggers.DrawingView;
 import nmsu.hcc.pattern_triggers.LaunchApplicationHelper;
+import nmsu.hcc.pattern_triggers.LocalStorage;
 import nmsu.hcc.pattern_triggers.R;
 import nmsu.hcc.pattern_triggers.listeners.ParsedTextListener;
+
+import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_GOOGLE_CHROME;
+import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_TURN_OFF_TORCH;
+import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_TURN_ON_TORCH;
+import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_YOUTUBE;
 
 public class DrawPatternActivity extends ImageActivity {
 
@@ -97,21 +103,19 @@ public class DrawPatternActivity extends ImageActivity {
     }
 
     private void takeAction(String s){
-        switch (s) {
-            case "M":
+        int featureId = LocalStorage.getInstance().getFeatureIdByAlphabetName(this, s);
+        switch (featureId) {
+            case FEATURE_GOOGLE_CHROME:
+                LaunchApplicationHelper.openApplication(this, "com.android.chrome");
+                break;
+            case FEATURE_YOUTUBE:
+                LaunchApplicationHelper.openApplication(this, "com.google.android.youtube");
+                break;
+            case FEATURE_TURN_ON_TORCH:
                 LaunchApplicationHelper.switchFlashLight(this, true);
                 break;
-            case "N":
+            case FEATURE_TURN_OFF_TORCH:
                 LaunchApplicationHelper.switchFlashLight(this, false);
-                break;
-            case "B":
-                LaunchApplicationHelper.openApplication(this, "com.android.chrome");
-                //LaunchApplicationHelper.launchApp(this, "com.android.chrome");
-                break;
-            case "V":
-            case "v":
-                LaunchApplicationHelper.openApplication(this, "com.google.android.youtube");
-                //LaunchApplicationHelper.launchApp(this, "com.google.android.youtube");
                 break;
             default:
                 Toast.makeText(this, "Did not matched with anything", Toast.LENGTH_LONG).show();
