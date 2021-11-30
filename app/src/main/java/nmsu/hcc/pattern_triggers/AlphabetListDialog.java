@@ -44,7 +44,7 @@ public class AlphabetListDialog extends Dialog {
         this.alphabetList = alphabetList;
         this.selectedItemPosition = selectedItem;
         this.headerText = headerText;
-        alertDialog = new Dialog(context); // ** no style defined **
+        alertDialog = new Dialog(context, R.style.CustomDialog); // ** no style defined **
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
@@ -54,7 +54,7 @@ public class AlphabetListDialog extends Dialog {
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         alertDialog.setContentView(dialogAlphabetListBinding.getRoot());
 
-        dialogAlphabetListBinding.rvAlphabetList.setLayoutManager(new GridLayoutManager(context, 6));
+        dialogAlphabetListBinding.rvAlphabetList.setLayoutManager(new GridLayoutManager(context, 4));
         alphabetListAdapter = new AlphabetListAdapter(context, alphabetList, selectedItemPosition);
         dialogAlphabetListBinding.rvAlphabetList.setAdapter(alphabetListAdapter);
         alphabetListAdapter.setOnItemClickListener((position, alphabet) -> {

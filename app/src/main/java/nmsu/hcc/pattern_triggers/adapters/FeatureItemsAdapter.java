@@ -59,6 +59,7 @@ public class FeatureItemsAdapter extends RecyclerView.Adapter<FeatureItemsAdapte
                 featureMappingList.get(position).setAlphabet(alphabet);
                 notifyDataSetChanged();
                 LocalStorage.getInstance().saveFeatureMapping(context, featureMappingList);
+                alphabetListDialog.dismissDialog();
             });
             alphabetListDialog.setCancelable(true);
             alphabetListDialog.show();

@@ -39,6 +39,9 @@ public class LocalStorage {
     }
 
     public Alphabet getAlphabetById(int id){
+
+        if (id==0) return null;
+
         for (Alphabet alphabet: getAlphabetList()) {
             if (alphabet.getAlphabetId()==id) return alphabet;
         }

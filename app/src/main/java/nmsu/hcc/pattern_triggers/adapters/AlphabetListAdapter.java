@@ -1,6 +1,7 @@
 package nmsu.hcc.pattern_triggers.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import nmsu.hcc.pattern_triggers.R;
 import nmsu.hcc.pattern_triggers.databinding.AdapterAlphabetListBinding;
 import nmsu.hcc.pattern_triggers.model.Alphabet;
-import nmsu.hcc.pattern_triggers.model.FeatureMapping;
 
 public class AlphabetListAdapter extends RecyclerView.Adapter<AlphabetListAdapter.ViewHolder> {
 
@@ -29,6 +29,7 @@ public class AlphabetListAdapter extends RecyclerView.Adapter<AlphabetListAdapte
         this.context = context;
         this.alphabetArrayList = alphabetArrayList;
         this.selectedItemPosition = selectedItemPosition;
+        Log.e("AlphabetListAdapter", "Array size: "+alphabetArrayList.size());
     }
 
     @NonNull
@@ -41,6 +42,7 @@ public class AlphabetListAdapter extends RecyclerView.Adapter<AlphabetListAdapte
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         if(alphabetArrayList.get(position).getAlphabetId()==0){
             viewHolder.adapterAlphabetListBinding.tvAlphabet.setVisibility(View.GONE);
+            viewHolder.adapterAlphabetListBinding.tvAlphabet.setText("");
             viewHolder.adapterAlphabetListBinding.ivNothing.setVisibility(View.VISIBLE);
         } else {
             viewHolder.adapterAlphabetListBinding.tvAlphabet.setVisibility(View.VISIBLE);
@@ -51,13 +53,13 @@ public class AlphabetListAdapter extends RecyclerView.Adapter<AlphabetListAdapte
         if(position==selectedItemPosition){
             viewHolder.adapterAlphabetListBinding.flBorder.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_primary));
         } else {
-            viewHolder.adapterAlphabetListBinding.flBorder.setBackground(null);
+            viewHolder.adapterAlphabetListBinding.flBorder.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_light));
         }
 
         viewHolder.adapterAlphabetListBinding.getRoot().setOnClickListener(view -> {
             this.selectedItemPosition = position;
             notifyDataSetChanged();
-            onItemClickListener.onItemClicked(position, alphabetArrayList.get(position));
+            onItemClickListener.onItemClicked(position, position==0 ? null:alphabetArrayList.get(position));
         });
 
         //viewHolder.openHoursBinding.tvWeekday.setText(openHoursList.get(position).getWeekday());
