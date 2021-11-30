@@ -1,21 +1,21 @@
 package nmsu.hcc.pattern_triggers.model;
 
 public class FeatureMapping {
-    String featureId;
+    int featureId;
     String featureName;
-    String alphabet;
+    Alphabet alphabet;
 
-    public FeatureMapping(String featureId, String featureName, String alphabet) {
+    public FeatureMapping(int featureId, String featureName, Alphabet alphabet) {
         this.featureId = featureId;
         this.featureName = featureName;
         this.alphabet = alphabet;
     }
 
-    public String getFeatureId() {
+    public int getFeatureId() {
         return featureId;
     }
 
-    public void setFeatureId(String featureId) {
+    public void setFeatureId(int featureId) {
         this.featureId = featureId;
     }
 
@@ -27,11 +27,11 @@ public class FeatureMapping {
         this.featureName = featureName;
     }
 
-    public String getAlphabet() {
+    public Alphabet getAlphabet() {
         return alphabet;
     }
 
-    public void setAlphabet(String alphabet) {
+    public void setAlphabet(Alphabet alphabet) {
         this.alphabet = alphabet;
     }
 }

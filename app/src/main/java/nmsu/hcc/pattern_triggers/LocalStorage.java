@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import nmsu.hcc.pattern_triggers.model.Alphabet;
 import nmsu.hcc.pattern_triggers.model.FeatureMapping;
 
 public class LocalStorage {
@@ -23,6 +24,29 @@ public class LocalStorage {
 
     private SharedPreferences getBaseConfig(Context context) {
         return context.getSharedPreferences("pattern_triggers_app", Context.MODE_PRIVATE);
+    }
+
+    public ArrayList<Alphabet> getAlphabetList(){
+        ArrayList<Alphabet> alphabetArrayList = new ArrayList<>();
+
+        alphabetArrayList.add(new Alphabet(0, ""));
+        alphabetArrayList.add(new Alphabet(1, "B"));
+        alphabetArrayList.add(new Alphabet(2, "V"));
+        alphabetArrayList.add(new Alphabet(3, "M"));
+        alphabetArrayList.add(new Alphabet(4, "N"));
+
+        return alphabetArrayList;
+    }
+
+    public ArrayList<FeatureMapping> getDefaultFeatureList(){
+        ArrayList<FeatureMapping> featureMappings = new ArrayList<>();
+
+        featureMappings.add(new FeatureMapping(0, "Google Chrome", null));
+        featureMappings.add(new FeatureMapping(1, "Youtube", null));
+        featureMappings.add(new FeatureMapping(2, "Turn 'on' torch", null));
+        featureMappings.add(new FeatureMapping(3, "Turn 'off' torch", null));
+
+        return featureMappings;
     }
 
     public void saveFeatureMapping(Context context, ArrayList<FeatureMapping> featureMappingArrayList) {
