@@ -38,6 +38,13 @@ public class LocalStorage {
         return alphabetArrayList;
     }
 
+    public Alphabet getAlphabetById(int id){
+        for (Alphabet alphabet: getAlphabetList()) {
+            if (alphabet.getAlphabetId()==id) return alphabet;
+        }
+        return null;
+    }
+
     public ArrayList<FeatureMapping> getDefaultFeatureList(){
         ArrayList<FeatureMapping> featureMappings = new ArrayList<>();
 

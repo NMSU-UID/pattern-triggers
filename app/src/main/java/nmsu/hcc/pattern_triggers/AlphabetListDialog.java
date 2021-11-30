@@ -9,10 +9,8 @@ import android.view.Window;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import nmsu.hcc.pattern_triggers.adapters.AlphabetListAdapter;
 import nmsu.hcc.pattern_triggers.databinding.DialogAlphabetListBinding;
@@ -27,23 +25,25 @@ public class AlphabetListDialog extends Dialog {
     private AlphabetListAdapter alphabetListAdapter;
 
     ArrayList<Alphabet> alphabetList;
-    int selectedItem;
+    int selectedItemPosition;
+    String headerText;
 
     private boolean isCancelable = true;
 
     public interface ButtonClickListener {
-        void onButtonClick(int position, Alphabet alphabet);
+        void onButtonClick(Alphabet alphabet);
     }
 
     public void getButtonCLickListener(ButtonClickListener buttonClickListener) {
         this.buttonClickListener = buttonClickListener;
     }
 
-    public AlphabetListDialog(Context context, ArrayList<Alphabet> alphabetList, int selectedItem) {
+    public AlphabetListDialog(Context context, ArrayList<Alphabet> alphabetList, int selectedItem, String headerText) {
         super(context);
         this.context = context;
         this.alphabetList = alphabetList;
-        this.selectedItem = selectedItem;
+        this.selectedItemPosition = selectedItem;
+        this.headerText = headerText;
         alertDialog = new Dialog(context); // ** no style defined **
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
@@ -54,11 +54,17 @@ public class AlphabetListDialog extends Dialog {
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         alertDialog.setContentView(dialogAlphabetListBinding.getRoot());
 
-        dialogAlphabetListBinding.rvContactList.setLayoutManager(new GridLayoutManager(context, 6));
-        alphabetListAdapter = new AlphabetListAdapter(context, alphabetList, selectedItem);
-        dialogAlphabetListBinding.rvContactList.setAdapter(alphabetListAdapter);
+        dialogAlphabetListBinding.rvAlphabetList.setLayoutManager(new GridLayoutManager(context, 6));
+        alphabetListAdapter = new AlphabetListAdapter(context, alphabetList, selectedItemPosition);
+        dialogAlphabetListBinding.rvAlphabetList.setAdapter(alphabetListAdapter);
         alphabetListAdapter.setOnItemClickListener((position, alphabet) -> {
-            buttonClickListener.onButtonClick(position, alphabet);
+            this.selectedItemPosition = position;
+        });
+
+        dialogAlphabetListBinding.tvHeaderText.setText(headerText);
+        dialogAlphabetListBinding.ivCross.setOnClickListener(view -> alertDialog.dismiss());
+        dialogAlphabetListBinding.btnDone.setOnClickListener(view -> {
+            buttonClickListener.onButtonClick(LocalStorage.getInstance().getAlphabetById(this.selectedItemPosition));
         });
 
         alertDialog.setCancelable(isCancelable);
