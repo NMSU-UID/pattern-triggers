@@ -3,6 +3,8 @@ package nmsu.hcc.pattern_triggers.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +19,11 @@ import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_TURN_OFF_TORCH;
 import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_TURN_ON_TORCH;
 import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_YOUTUBE;
 
-public class DrawPatternActivity extends ImageActivity {
+public class DrawPatternActivity extends ImageActivity implements PopupMenu.OnMenuItemClickListener {
 
     DrawingView drawingView;
-    TextView tvSettings;
+    TextView tvMenu;
+    PopupMenu popupMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,86 +33,22 @@ public class DrawPatternActivity extends ImageActivity {
         setContentView(R.layout.activity_draw_pattern);
 
         drawingView = findViewById(R.id.llCanvas);
-        tvSettings = findViewById(R.id.tvSettings);
+        tvMenu = findViewById(R.id.tvMenu);
 
-        drawingView.getParsedTextListener(new ParsedTextListener() {
-            @Override
-            public void parsedText(String text) {
-                Log.e("DrawPatternActivity", "Parsed Text: "+text);
-                takeAction(text);
-                finish();
-            }
+        drawingView.getParsedTextListener(text -> {
+            Log.e("DrawPatternActivity", "Parsed Text: "+text);
+            takeAction(text);
+            finish();
         });
 
-        tvSettings.setOnClickListener(view -> {
-            startActivity(new Intent(DrawPatternActivity.this, SettingsActivity.class));
+
+        popupMenu = new PopupMenu(this, tvMenu);
+        popupMenu.getMenu().add(1, R.id.settings, 1, "Settings");
+        popupMenu.setOnMenuItemClickListener(DrawPatternActivity.this);
+
+        tvMenu.setOnClickListener(view -> {
+            popupMenu.show();
         });
-
-        /*drawingView.getLatestBitmapImage(new LatestBitmapImageListener() {
-            @Override
-            public void latestBitmapImage(Bitmap imageBitmap) {
-                Log.e("latestBitmapImage", "bytes: "+String.valueOf(imageBitmap.getByteCount()));
-                Log.e("latestBitmapImage", "height: "+String.valueOf(imageBitmap.getHeight()));
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(imageBitmap, 1024, 764, false);
-                imageView.setImageBitmap(scaledBitmap);
-
-                InputImage image = InputImage.fromBitmap(scaledBitmap, 0);
-                TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-                Task<Text> result = recognizer.process(image)
-                        .addOnSuccessListener(new OnSuccessListener<Text>() {
-                            @Override
-                            public void onSuccess(Text visionText) {
-                                // Task completed successfully
-                                // ...
-                                Log.e("Parsed Text", "Parsed Text: "+visionText.getText());
-                                textView.setText(visionText.getText());
-                            }
-                        })
-                        .addOnFailureListener(
-                                new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Task failed with an exception
-                                        // ...
-                                        Log.e("Parsed Text", String.valueOf(e));
-                                    }
-                                });
-            }
-        });
-
-        findViewById(R.id.btnOpenGallery).setOnClickListener(view -> {
-            getImageFromGallery(new ImageGetListener() {
-                @Override
-                public void successfullyGetImage(File imageFile, Bitmap imageBitmap) throws FileNotFoundException {
-                    InputImage image = InputImage.fromBitmap(imageBitmap, 0);
-                    TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-                    Task<Text> result = recognizer.process(image)
-                                    .addOnSuccessListener(visionText -> {
-                                        // Task completed successfully
-                                        // ...
-                                        Log.e("Parsed Text", "Parsed Text: "+visionText.getText());
-                                        textView.setText(visionText.getText());
-                                    })
-                                    .addOnFailureListener(
-                                            new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    // Task failed with an exception
-                                                    // ...
-                                                    Log.e("Parsed Text", String.valueOf(e));
-                                                }
-                                            });
-
-                }
-
-                @Override
-                public void failToGetImage(String message) {
-
-                }
-            });
-        });
-
-         */
 
     }
 
@@ -141,4 +80,12 @@ public class DrawPatternActivity extends ImageActivity {
         }
     }
 
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return true;
+    }
 }
