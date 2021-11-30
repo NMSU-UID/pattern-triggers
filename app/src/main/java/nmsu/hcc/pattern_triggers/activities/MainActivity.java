@@ -29,18 +29,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void takeAction(String s){
-        if(s.equals("M")){
-            LaunchApplicationHelper.switchFlashLight(MainActivity.this, true);
-        } else if(s.equals("N")){
-            LaunchApplicationHelper.switchFlashLight(MainActivity.this, false);
-        } else if(s.equals("B")){
-            LaunchApplicationHelper.openApplication(MainActivity.this, "com.android.chrome");
-        } else if(s.equals("V") || s.equals("v")){
-            LaunchApplicationHelper.openApplication(MainActivity.this, "com.google.android.youtube");
-        } else {
-            Toast.makeText(this,"Did not matched with anything", Toast.LENGTH_LONG).show();
-        }
-    }
-
 }
