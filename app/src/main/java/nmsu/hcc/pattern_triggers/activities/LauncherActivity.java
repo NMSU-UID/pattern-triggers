@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import nmsu.hcc.pattern_triggers.DigitalInkManager;
 import nmsu.hcc.pattern_triggers.LocalStorage;
 import nmsu.hcc.pattern_triggers.R;
 
@@ -15,6 +16,8 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher_activity);
+
+        DigitalInkManager.getInstance().initMLModel();
 
         if(LocalStorage.getInstance().getSavedFeatureMapping(this)!=null){
             if(LocalStorage.getInstance().getSavedFeatureMapping(this).size()!=0){
