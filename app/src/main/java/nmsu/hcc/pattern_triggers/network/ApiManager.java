@@ -1,8 +1,13 @@
 package nmsu.hcc.pattern_triggers.network;
 
 import android.content.Context;
+import android.util.Log;
+
 import com.google.gson.Gson;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Random;
 
 import nmsu.hcc.pattern_triggers.network.listeners.FeatureMappingListener;
 import nmsu.hcc.pattern_triggers.network.listeners.PerformanceTrackerListener;
@@ -78,29 +83,35 @@ public class ApiManager {
         };
     }
 
-    /*public String registration(String firstName, String lastName, String email, String password, String passwordConfirmation, int userRegistration, RegistrationListener registrationListener) {
-        this.registrationListener = registrationListener;
-        this.reqIdRegistration = ShareInfo.getInstance().getRequestId();
+    public String performanceTracking(String userId, String alphabet, boolean success, PerformanceTrackerListener performanceTrackerListener) {
+        this.performanceTrackerListener = performanceTrackerListener;
+        this.reqIdPerformanceTracker = generateRequestId();
         HashMap hashMap = new HashMap();
-        hashMap.put("first_name", firstName);
-        hashMap.put("last_name", lastName);
-        hashMap.put("email", email);
-        hashMap.put("password", password);
-        hashMap.put("password_confirmation", passwordConfirmation);
-        hashMap.put("user_registration", 1);
-        Log.e("SignUpActivity::", "HashMAp::" + hashMap.toString());
-        apiHandler.httpRequest(ShareInfo.getInstance().getWasekaUrl(), "user-registration", "post", reqIdRegistration, hashMap);
-        return reqIdRegistration;
-    }*/
+        hashMap.put("user-id", userId);
+        hashMap.put("alphabet", alphabet);
+        hashMap.put("success", success);
 
-    /*public String login(String email, String password, LoginListener loginListener) {
-        this.loginListener = loginListener;
-        this.reqIdLogin = ShareInfo.getInstance().getRequestId();
+        Log.e("ApiManager", "performanceTracking HashMAp::" + hashMap.toString());
+        apiHandler.httpRequest("enter-base-url-here", "enter-url-path-here", "post", reqIdPerformanceTracker, hashMap);
+        return reqIdPerformanceTracker;
+    }
+
+    public String featureMapping(String userId, String alphabet, String feature, FeatureMappingListener featureMappingListener) {
+        this.featureMappingListener = featureMappingListener;
+        this.reqIdFeatureMapping = generateRequestId();
         HashMap hashMap = new HashMap();
-        hashMap.put("email", email);
-        hashMap.put("password", password);
-        apiHandler.httpRequest(ShareInfo.getInstance().getWasekaUrl(), "user-login", "post", reqIdLogin, hashMap);
-        return reqIdLogin;
-    }*/
+        hashMap.put("user-id", userId);
+        hashMap.put("alphabet", alphabet);
+        hashMap.put("feature", feature);
+
+        Log.e("ApiManager", "featureMapping HashMAp::" + hashMap.toString());
+        apiHandler.httpRequest("enter-base-url-here", "enter-url-path-here", "post", reqIdFeatureMapping, hashMap);
+        return reqIdFeatureMapping;
+    }
+
+    public String generateRequestId() {
+        Random rand = new Random();
+        return System.currentTimeMillis() + "" + rand.nextInt(100000);
+    }
 
 }
