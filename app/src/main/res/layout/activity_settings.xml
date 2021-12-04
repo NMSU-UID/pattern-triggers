@@ -14,14 +14,16 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="Application vs Alphabet Mapping"/>
+            android:textColor="@color/colorBlack"
+            android:text="@string/application_vs_alphabet_mapping"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:layout_marginTop="10dp"
-            android:text="On the next screen, launch a tool or an app by drawing the corresponding alphabet."/>
+            android:textColor="@color/black"
+            android:text="@string/launch_a_tool_or_an_app_by_drawing_the_corresponding_alphabet"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,15 +38,22 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnTryIt"
+        <TextView
+            android:id="@+id/tvTryIt"
+            android:layout_marginTop="25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:textSize="14sp"
+            android:gravity="center"
             android:layout_gravity="center"
-            android:textColor="@color/black"
-            android:text="Try it"
-            android:backgroundTint="@android:color/darker_gray"/>
+            android:textStyle="bold"
+            android:textColor="@color/colorWhite"
+            android:text="@string/try_it"
+            android:background="@drawable/bg_primary_fill"/>
 
     </LinearLayout>
 </layout>

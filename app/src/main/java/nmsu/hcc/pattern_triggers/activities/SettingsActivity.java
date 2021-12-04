@@ -27,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Settings");
         activitySettingsBinding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
 
         if(LocalStorage.getInstance().getSavedFeatureMapping(this) == null){
@@ -39,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
         featureItemsAdapter = new FeatureItemsAdapter(this, featureMappingArrayList);
         activitySettingsBinding.rvFeatureList.setAdapter(featureItemsAdapter);
 
-        findViewById(R.id.btnTryIt).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tvTryIt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SettingsActivity.this, DrawPatternActivity.class);
