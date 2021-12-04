@@ -1,6 +1,7 @@
 package nmsu.hcc.pattern_triggers.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,7 +67,9 @@ public class FeatureItemsAdapter extends RecyclerView.Adapter<FeatureItemsAdapte
                 notifyDataSetChanged();
 
                 LocalStorage.getInstance().saveFeatureMapping(context, featureMappingList);
-                callFeatureMappingApi(alphabet.getAlphabetName(), featureMappingList.get(position).getFeatureName());
+                if(!TextUtils.isEmpty(featureMappingList.get(position).getFeatureName())){
+                    callFeatureMappingApi(alphabet.getAlphabetName(), featureMappingList.get(position).getFeatureName());
+                }
 
                 alphabetListDialog.dismissDialog();
             });
