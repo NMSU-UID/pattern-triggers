@@ -13,6 +13,9 @@ import nmsu.hcc.pattern_triggers.LaunchApplicationHelper;
 import nmsu.hcc.pattern_triggers.LocalStorage;
 import nmsu.hcc.pattern_triggers.R;
 import nmsu.hcc.pattern_triggers.listeners.ParsedTextListener;
+import nmsu.hcc.pattern_triggers.network.ApiManager;
+import nmsu.hcc.pattern_triggers.network.listeners.PerformanceTrackerListener;
+import nmsu.hcc.pattern_triggers.network.response.PerformanceTrackingResponse;
 
 import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_GOOGLE_CHROME;
 import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_TURN_OFF_TORCH;
@@ -24,6 +27,7 @@ public class DrawPatternActivity extends ImageActivity implements PopupMenu.OnMe
     DrawingView drawingView;
     TextView tvMenu;
     PopupMenu popupMenu;
+    ApiManager apiManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,8 @@ public class DrawPatternActivity extends ImageActivity implements PopupMenu.OnMe
 
         drawingView = findViewById(R.id.llCanvas);
         tvMenu = findViewById(R.id.tvMenu);
+
+        apiManager = new ApiManager(this);
 
         drawingView.getParsedTextListener(text -> {
             Log.e("DrawPatternActivity", "Parsed Text: "+text);
@@ -59,8 +65,9 @@ public class DrawPatternActivity extends ImageActivity implements PopupMenu.OnMe
         catch (NullPointerException ignored){}
     }
 
-    private void takeAction(String s){
-        int featureId = LocalStorage.getInstance().getFeatureIdByAlphabetName(this, s);
+    private void takeAction(String alphabet){
+        int featureId = LocalStorage.getInstance().getFeatureIdByAlphabetName(this, alphabet);
+        boolean success = true;
         switch (featureId) {
             case FEATURE_GOOGLE_CHROME:
                 LaunchApplicationHelper.openApplication(this, "com.android.chrome");
@@ -75,9 +82,12 @@ public class DrawPatternActivity extends ImageActivity implements PopupMenu.OnMe
                 LaunchApplicationHelper.switchFlashLight(this, false);
                 break;
             default:
+                success = false;
                 Toast.makeText(this, "Did not matched with anything", Toast.LENGTH_LONG).show();
                 break;
         }
+
+        callPerformanceTrackingApi(alphabet, success);
     }
 
     @Override
@@ -87,5 +97,30 @@ public class DrawPatternActivity extends ImageActivity implements PopupMenu.OnMe
             return true;
         }
         return true;
+    }
+
+    private void callPerformanceTrackingApi(String alphabet, boolean success){
+        apiManager.performanceTracking(alphabet, success, new PerformanceTrackerListener() {
+            @Override
+            public void onSuccess(PerformanceTrackingResponse performanceTrackingResponse) {
+                Log.e("DrawPatternActivity", "performanceTrackingResponse: success - " + performanceTrackingResponse.getCode());
+            }
+
+            @Override
+            public void onFailed(String message, int responseCode) {
+                Log.e("DrawPatternActivity", "performanceTrackingResponse: failed - " + responseCode + " : " + message);
+            }
+
+            @Override
+            public void startLoading(String requestId) {
+
+            }
+
+            @Override
+            public void endLoading(String requestId) {
+
+            }
+        });
+
     }
 }
