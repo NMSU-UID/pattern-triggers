@@ -41,7 +41,9 @@ public class LauncherActivity extends AppCompatActivity {
 
         if(LocalStorage.getInstance().getSavedFeatureMapping(this)!=null){
             if(LocalStorage.getInstance().getSavedFeatureMapping(this).size()!=0){
-                startActivity(new Intent(LauncherActivity.this, DrawPatternActivity.class));
+                Intent intent = new Intent(LauncherActivity.this, DrawPatternActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 finish();
             } else {
                 new Handler().postDelayed(() -> {
