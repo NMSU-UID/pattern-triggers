@@ -1,5 +1,6 @@
 package nmsu.hcc.pattern_triggers.network;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -22,12 +23,12 @@ public interface AllNetworkCalls {
             @QueryMap Map<String, String> hashMap
     );
 
-    @FormUrlEncoded
+    /*@FormUrlEncoded
     @POST("{url}")
     Call<ResponseBody> postRequest(
             @Path(value = "url", encoded = true) String path,
             @FieldMap Map<String, String> hashMap
-    );
+    );*/
 
     @GET("{url}")
     Call<ResponseBody> getRequest(
@@ -38,7 +39,7 @@ public interface AllNetworkCalls {
     @POST("{url}")
     Call<ResponseBody> postRequest(
             @Path(value = "url", encoded = true) String path,
-            @Body String body
+            @Body HashMap body
     );
 
     @DELETE("{url}")

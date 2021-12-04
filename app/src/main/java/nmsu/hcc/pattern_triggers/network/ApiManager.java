@@ -94,8 +94,10 @@ public class ApiManager {
         hashMap.put("alphabet", alphabet);
         hashMap.put("success", success);
 
+        String gsonString = new Gson().toJson(hashMap);
+
         Log.e("ApiManager", "performanceTracking HashMAp::" + hashMap.toString());
-        apiHandler.httpRequest("https://pattern-triggers-backend.herokuapp.com/", "performance-tracking", "post", reqIdPerformanceTracker, hashMap);
+        apiHandler.httpRequest("https://pattern-triggers-backend.herokuapp.com/api/v1/", "performance-tracking", "post", reqIdPerformanceTracker, hashMap, gsonString);
         return reqIdPerformanceTracker;
     }
 
@@ -109,8 +111,10 @@ public class ApiManager {
         hashMap.put("alphabet", alphabet);
         hashMap.put("feature", feature);
 
+        String gsonString = new Gson().toJson(hashMap);
+
         Log.e("ApiManager", "featureMapping HashMAp::" + hashMap.toString());
-        apiHandler.httpRequest("https://pattern-triggers-backend.herokuapp.com/", "feature-mapping", "post", reqIdFeatureMapping, hashMap);
+        apiHandler.httpRequest("https://pattern-triggers-backend.herokuapp.com/api/v1/", "feature-mapping", "post", reqIdFeatureMapping, hashMap, gsonString);
         return reqIdFeatureMapping;
     }
 

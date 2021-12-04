@@ -9,10 +9,11 @@
     tools:context=".activities.MainActivity">
 
     <Button
-        android:id="@+id/btnOpenApplication"
+        android:id="@+id/btnSettings"
         android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Settings"
         android:textColor="@color/white"
         />
 

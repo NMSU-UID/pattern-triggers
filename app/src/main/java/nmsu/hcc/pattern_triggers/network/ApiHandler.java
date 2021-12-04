@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.Map;
 
 import nmsu.hcc.pattern_triggers.R;
 import okhttp3.ResponseBody;
@@ -27,7 +28,7 @@ public abstract class ApiHandler {
     }
 
 
-    public void httpRequest(String baseUrl, String path, String requestType, String requestId, HashMap hashMap) {
+    public void httpRequest(String baseUrl, String path, String requestType, String requestId, HashMap hashMap, String gsonString) {
         try {
             startApiCall(requestId);
             Call<ResponseBody> bodyToCall = null;
@@ -37,6 +38,7 @@ public abstract class ApiHandler {
                     bodyToCall = ApiClient.callRetrofit(context, baseUrl, requestId).getRequest(path, hashMap);
                     break;
                 case "post":
+                    //bodyToCall = ApiClient.callRetrofit(context, baseUrl, requestId).postRequest(path, hashMap);
                     bodyToCall = ApiClient.callRetrofit(context, baseUrl, requestId).postRequest(path, hashMap);
                     break;
                 case "delete":
