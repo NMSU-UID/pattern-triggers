@@ -22,6 +22,7 @@ public class LauncherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        hideToolbar();
         setContentView(R.layout.activity_launcher_activity);
 
         DigitalInkManager.getInstance().initMLModel();
@@ -60,4 +61,12 @@ public class LauncherActivity extends AppCompatActivity {
             }, 1500);
         }
     }
+
+    private void hideToolbar() {
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException ignored){}
+    }
+
 }
