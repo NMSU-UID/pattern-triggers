@@ -4,27 +4,38 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class FeatureMappingResponse {
-    @SerializedName("status")
+    @SerializedName("success")
     @Expose
-    private boolean status;
+    private boolean success;
     @SerializedName("code")
     @Expose
-    private int result;
+    private int code;
+    @SerializedName("message")
+    @Expose
+    private String message;
 
-    public boolean isStatus() {
-        return status;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
-    public int getResult() {
-        return result;
+    public int getCode() {
+        return code;
     }
 
-    public void setResult(int result) {
-        this.result = result;
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
 

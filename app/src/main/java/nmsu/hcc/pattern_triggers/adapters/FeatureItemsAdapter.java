@@ -1,6 +1,7 @@
 package nmsu.hcc.pattern_triggers.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,9 @@ import nmsu.hcc.pattern_triggers.LocalStorage;
 import nmsu.hcc.pattern_triggers.R;
 import nmsu.hcc.pattern_triggers.databinding.AdapterFeatureItemsBinding;
 import nmsu.hcc.pattern_triggers.model.FeatureMapping;
+import nmsu.hcc.pattern_triggers.network.ApiManager;
+import nmsu.hcc.pattern_triggers.network.listeners.FeatureMappingListener;
+import nmsu.hcc.pattern_triggers.network.response.FeatureMappingResponse;
 
 public class FeatureItemsAdapter extends RecyclerView.Adapter<FeatureItemsAdapter.ViewHolder> {
 
@@ -24,10 +28,12 @@ public class FeatureItemsAdapter extends RecyclerView.Adapter<FeatureItemsAdapte
     /*OnItemClickListener onItemClickListener;*/
 
     ArrayList<FeatureMapping> featureMappingList;
+    ApiManager apiManager;
 
     public FeatureItemsAdapter(Context context, ArrayList<FeatureMapping> featureMappingList) {
         this.context = context;
         this.featureMappingList = featureMappingList;
+        apiManager = new ApiManager(context);
     }
 
     @NonNull
@@ -58,7 +64,10 @@ public class FeatureItemsAdapter extends RecyclerView.Adapter<FeatureItemsAdapte
             alphabetListDialog.getButtonCLickListener((alphabet) -> {
                 featureMappingList.get(position).setAlphabet(alphabet);
                 notifyDataSetChanged();
+
                 LocalStorage.getInstance().saveFeatureMapping(context, featureMappingList);
+                callFeatureMappingApi(alphabet.getAlphabetName(), featureMappingList.get(position).getFeatureName());
+
                 alphabetListDialog.dismissDialog();
             });
             alphabetListDialog.setCancelable(true);
@@ -91,6 +100,30 @@ public class FeatureItemsAdapter extends RecyclerView.Adapter<FeatureItemsAdapte
             this.adapterFeatureItemsBinding = adapterFeatureItemsBinding;
 
         }
+    }
+
+    private void callFeatureMappingApi(String alphabet, String feature){
+        apiManager.featureMapping(alphabet, feature, new FeatureMappingListener() {
+            @Override
+            public void onSuccess(FeatureMappingResponse featureMappingResponse) {
+                Log.e("FeatureItemsAdapter", "featureMappingResponse: success - " + featureMappingResponse.getCode());
+            }
+
+            @Override
+            public void onFailed(String message, int responseCode) {
+                Log.e("FeatureItemsAdapter", "featureMappingResponse: failed - " + responseCode + " : " + message);
+            }
+
+            @Override
+            public void startLoading(String requestId) {
+
+            }
+
+            @Override
+            public void endLoading(String requestId) {
+
+            }
+        });
     }
 
 
