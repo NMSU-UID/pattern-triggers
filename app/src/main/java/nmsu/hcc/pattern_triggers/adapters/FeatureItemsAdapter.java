@@ -67,7 +67,7 @@ public class FeatureItemsAdapter extends RecyclerView.Adapter<FeatureItemsAdapte
                 notifyDataSetChanged();
 
                 LocalStorage.getInstance().saveFeatureMapping(context, featureMappingList);
-                if(!TextUtils.isEmpty(featureMappingList.get(position).getFeatureName())){
+                if(alphabet!=null){
                     callFeatureMappingApi(alphabet.getAlphabetName(), featureMappingList.get(position).getFeatureName());
                 }
 

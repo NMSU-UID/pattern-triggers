@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import nmsu.hcc.pattern_triggers.LocalStorage;
 import nmsu.hcc.pattern_triggers.R;
 import nmsu.hcc.pattern_triggers.databinding.AdapterAlphabetListBinding;
 import nmsu.hcc.pattern_triggers.model.Alphabet;
@@ -48,6 +50,12 @@ public class AlphabetListAdapter extends RecyclerView.Adapter<AlphabetListAdapte
             viewHolder.adapterAlphabetListBinding.tvAlphabet.setVisibility(View.VISIBLE);
             viewHolder.adapterAlphabetListBinding.tvAlphabet.setText(alphabetArrayList.get(position).getAlphabetName());
             viewHolder.adapterAlphabetListBinding.ivNothing.setVisibility(View.GONE);
+
+            if(LocalStorage.getInstance().getFeatureIdByAlphabetName(context, alphabetArrayList.get(position).getAlphabetName())==-1){
+                viewHolder.adapterAlphabetListBinding.tvAlphabet.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+            } else {
+                viewHolder.adapterAlphabetListBinding.tvAlphabet.setTextColor(ContextCompat.getColor(context, R.color.colorSuperLightPrimary));
+            }
         }
 
         if(position==selectedItemPosition){
@@ -57,9 +65,14 @@ public class AlphabetListAdapter extends RecyclerView.Adapter<AlphabetListAdapte
         }
 
         viewHolder.adapterAlphabetListBinding.getRoot().setOnClickListener(view -> {
-            this.selectedItemPosition = position;
-            notifyDataSetChanged();
-            onItemClickListener.onItemClicked(position, position==0 ? null:alphabetArrayList.get(position));
+            if(LocalStorage.getInstance().getFeatureIdByAlphabetName(context, alphabetArrayList.get(position).getAlphabetName())==-1){
+                this.selectedItemPosition = position;
+                notifyDataSetChanged();
+                onItemClickListener.onItemClicked(position, position==0 ? null:alphabetArrayList.get(position));
+            } else {
+                Toast.makeText(context, "Already taken", Toast.LENGTH_LONG).show();
+            }
+
         });
 
         //viewHolder.openHoursBinding.tvWeekday.setText(openHoursList.get(position).getWeekday());
