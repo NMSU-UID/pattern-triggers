@@ -87,6 +87,11 @@ public class DrawingView extends View {
 
         setDrawingCacheEnabled(true);
 
+        initMLModel();
+
+    }
+
+    public void initMLModel(){
         // Specify the recognition model for a language
         try {
             modelIdentifier = DigitalInkRecognitionModelIdentifier.fromLanguageTag("en-US");
@@ -106,7 +111,6 @@ public class DrawingView extends View {
                 .addOnSuccessListener(aVoid -> Log.e("DrawingView", "Model downloaded"))
                 .addOnFailureListener(
                         e -> Log.e("DrawingView", "Error while downloading a model: " + e));
-
     }
 
     @Override

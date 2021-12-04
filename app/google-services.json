@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "629402374036",
+    "project_id": "nmsu-pattern-triggers",
+    "storage_bucket": "nmsu-pattern-triggers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629402374036:android:a2d859ec245abeab388981",
+        "android_client_info": {
+          "package_name": "nmsu.hcc.pattern_triggers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "629402374036-8rmj1lc3atubugb0n9v25ibr7vi4bcmn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-LjvQCLtf8jJwXfP02fZ_TAbgG8vvPiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "629402374036-8rmj1lc3atubugb0n9v25ibr7vi4bcmn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

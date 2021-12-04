@@ -1,122 +1,126 @@
 package nmsu.hcc.pattern_triggers.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import nmsu.hcc.pattern_triggers.DrawingView;
 import nmsu.hcc.pattern_triggers.LaunchApplicationHelper;
+import nmsu.hcc.pattern_triggers.LocalStorage;
 import nmsu.hcc.pattern_triggers.R;
 import nmsu.hcc.pattern_triggers.listeners.ParsedTextListener;
+import nmsu.hcc.pattern_triggers.network.ApiManager;
+import nmsu.hcc.pattern_triggers.network.listeners.PerformanceTrackerListener;
+import nmsu.hcc.pattern_triggers.network.response.PerformanceTrackingResponse;
 
-public class DrawPatternActivity extends ImageActivity {
+import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_GOOGLE_CHROME;
+import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_TURN_OFF_TORCH;
+import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_TURN_ON_TORCH;
+import static nmsu.hcc.pattern_triggers.LocalStorage.FEATURE_YOUTUBE;
+
+public class DrawPatternActivity extends ImageActivity implements PopupMenu.OnMenuItemClickListener {
 
     DrawingView drawingView;
+    TextView tvMenu;
+    PopupMenu popupMenu;
+    ApiManager apiManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        hideToolbar();
         setContentView(R.layout.activity_draw_pattern);
 
         drawingView = findViewById(R.id.llCanvas);
-        drawingView.getParsedTextListener(new ParsedTextListener() {
-            @Override
-            public void parsedText(String text) {
-                Log.e("DrawPatternActivity", "Parsed Text: "+text);
-                takeAction(text);
-                finish();
-            }
+        tvMenu = findViewById(R.id.tvMenu);
+
+        apiManager = new ApiManager(this);
+
+        drawingView.getParsedTextListener(text -> {
+            Log.e("DrawPatternActivity", "Parsed Text: "+text);
+            takeAction(text);
+            finish();
         });
 
-        /*drawingView.getLatestBitmapImage(new LatestBitmapImageListener() {
-            @Override
-            public void latestBitmapImage(Bitmap imageBitmap) {
-                Log.e("latestBitmapImage", "bytes: "+String.valueOf(imageBitmap.getByteCount()));
-                Log.e("latestBitmapImage", "height: "+String.valueOf(imageBitmap.getHeight()));
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(imageBitmap, 1024, 764, false);
-                imageView.setImageBitmap(scaledBitmap);
 
-                InputImage image = InputImage.fromBitmap(scaledBitmap, 0);
-                TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-                Task<Text> result = recognizer.process(image)
-                        .addOnSuccessListener(new OnSuccessListener<Text>() {
-                            @Override
-                            public void onSuccess(Text visionText) {
-                                // Task completed successfully
-                                // ...
-                                Log.e("Parsed Text", "Parsed Text: "+visionText.getText());
-                                textView.setText(visionText.getText());
-                            }
-                        })
-                        .addOnFailureListener(
-                                new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        // Task failed with an exception
-                                        // ...
-                                        Log.e("Parsed Text", String.valueOf(e));
-                                    }
-                                });
-            }
+        popupMenu = new PopupMenu(this, tvMenu);
+        popupMenu.getMenu().add(1, R.id.settings, 1, "Settings");
+        popupMenu.setOnMenuItemClickListener(DrawPatternActivity.this);
+
+        tvMenu.setOnClickListener(view -> {
+            popupMenu.show();
         });
-
-        findViewById(R.id.btnOpenGallery).setOnClickListener(view -> {
-            getImageFromGallery(new ImageGetListener() {
-                @Override
-                public void successfullyGetImage(File imageFile, Bitmap imageBitmap) throws FileNotFoundException {
-                    InputImage image = InputImage.fromBitmap(imageBitmap, 0);
-                    TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-                    Task<Text> result = recognizer.process(image)
-                                    .addOnSuccessListener(visionText -> {
-                                        // Task completed successfully
-                                        // ...
-                                        Log.e("Parsed Text", "Parsed Text: "+visionText.getText());
-                                        textView.setText(visionText.getText());
-                                    })
-                                    .addOnFailureListener(
-                                            new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    // Task failed with an exception
-                                                    // ...
-                                                    Log.e("Parsed Text", String.valueOf(e));
-                                                }
-                                            });
-
-                }
-
-                @Override
-                public void failToGetImage(String message) {
-
-                }
-            });
-        });
-
-         */
 
     }
 
-    private void takeAction(String s){
-        switch (s) {
-            case "M":
+    private void hideToolbar() {
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException ignored){}
+    }
+
+    private void takeAction(String alphabet){
+        int featureId = LocalStorage.getInstance().getFeatureIdByAlphabetName(this, alphabet);
+        boolean success = true;
+        switch (featureId) {
+            case FEATURE_GOOGLE_CHROME:
+                LaunchApplicationHelper.openApplication(this, "com.android.chrome");
+                break;
+            case FEATURE_YOUTUBE:
+                LaunchApplicationHelper.openApplication(this, "com.google.android.youtube");
+                break;
+            case FEATURE_TURN_ON_TORCH:
                 LaunchApplicationHelper.switchFlashLight(this, true);
                 break;
-            case "N":
+            case FEATURE_TURN_OFF_TORCH:
                 LaunchApplicationHelper.switchFlashLight(this, false);
                 break;
-            case "B":
-                LaunchApplicationHelper.openApplication(this, "com.android.chrome");
-                //LaunchApplicationHelper.launchApp(this, "com.android.chrome");
-                break;
-            case "V":
-            case "v":
-                LaunchApplicationHelper.openApplication(this, "com.google.android.youtube");
-                //LaunchApplicationHelper.launchApp(this, "com.google.android.youtube");
-                break;
             default:
+                success = false;
                 Toast.makeText(this, "Did not matched with anything", Toast.LENGTH_LONG).show();
                 break;
         }
+
+        callPerformanceTrackingApi(alphabet, success);
     }
 
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return true;
+    }
+
+    private void callPerformanceTrackingApi(String alphabet, boolean success){
+        apiManager.performanceTracking(alphabet, success, new PerformanceTrackerListener() {
+            @Override
+            public void onSuccess(PerformanceTrackingResponse performanceTrackingResponse) {
+                Log.e("DrawPatternActivity", "performanceTrackingResponse: success - " + performanceTrackingResponse.getCode());
+            }
+
+            @Override
+            public void onFailed(String message, int responseCode) {
+                Log.e("DrawPatternActivity", "performanceTrackingResponse: failed - " + responseCode + " : " + message);
+            }
+
+            @Override
+            public void startLoading(String requestId) {
+
+            }
+
+            @Override
+            public void endLoading(String requestId) {
+
+            }
+        });
+
+    }
 }

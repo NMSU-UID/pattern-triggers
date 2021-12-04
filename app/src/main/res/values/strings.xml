@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">pattern-triggers</string>
+
+    <string name="invalid_json_response">Invalid response</string>
+    <string name="invalid_request">Invalid request</string>
+    <string name="connectivity_error">No internet connection</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="access_deny">Access deny</string>
+
 </resources>

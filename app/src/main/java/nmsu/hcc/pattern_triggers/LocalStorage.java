@@ -14,6 +14,12 @@ import nmsu.hcc.pattern_triggers.model.Alphabet;
 import nmsu.hcc.pattern_triggers.model.FeatureMapping;
 
 public class LocalStorage {
+
+    public static final int FEATURE_GOOGLE_CHROME = 0;
+    public static final int FEATURE_YOUTUBE = 1;
+    public static final int FEATURE_TURN_ON_TORCH = 2;
+    public static final int FEATURE_TURN_OFF_TORCH = 3;
+
     private static final LocalStorage ourInstance = new LocalStorage();
 
     public static LocalStorage getInstance() {
@@ -48,13 +54,28 @@ public class LocalStorage {
         return null;
     }
 
+    public int getFeatureIdByAlphabetName(Context context, String alphabetName){
+        ArrayList<FeatureMapping> featureMappingArrayList = getSavedFeatureMapping(context);
+        if(featureMappingArrayList==null){
+            return -1;
+        }
+        for (FeatureMapping feature: getSavedFeatureMapping(context)) {
+            // not case sensitive; to support the lowercase like v or x
+            if (feature.getAlphabet()==null) return -1;
+            if(feature.getAlphabet().getAlphabetName().equalsIgnoreCase(alphabetName)){
+                return feature.getFeatureId();
+            }
+        }
+        return -1;
+    }
+
     public ArrayList<FeatureMapping> getDefaultFeatureList(){
         ArrayList<FeatureMapping> featureMappings = new ArrayList<>();
 
-        featureMappings.add(new FeatureMapping(0, "Google Chrome", null));
-        featureMappings.add(new FeatureMapping(1, "Youtube", null));
-        featureMappings.add(new FeatureMapping(2, "Turn 'on' torch", null));
-        featureMappings.add(new FeatureMapping(3, "Turn 'off' torch", null));
+        featureMappings.add(new FeatureMapping(FEATURE_GOOGLE_CHROME, "Google Chrome", null));
+        featureMappings.add(new FeatureMapping(FEATURE_YOUTUBE, "Youtube", null));
+        featureMappings.add(new FeatureMapping(FEATURE_TURN_ON_TORCH, "Turn 'on' torch", null));
+        featureMappings.add(new FeatureMapping(FEATURE_TURN_OFF_TORCH, "Turn 'off' torch", null));
 
         return featureMappings;
     }
