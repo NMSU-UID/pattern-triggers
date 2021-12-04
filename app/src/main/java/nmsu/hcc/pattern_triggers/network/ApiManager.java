@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Random;
 
+import nmsu.hcc.pattern_triggers.LocalStorage;
 import nmsu.hcc.pattern_triggers.network.listeners.FeatureMappingListener;
 import nmsu.hcc.pattern_triggers.network.listeners.PerformanceTrackerListener;
 import nmsu.hcc.pattern_triggers.network.response.FeatureMappingResponse;
@@ -83,29 +84,33 @@ public class ApiManager {
         };
     }
 
-    public String performanceTracking(String userId, String alphabet, boolean success, PerformanceTrackerListener performanceTrackerListener) {
+    public String performanceTracking(String alphabet, boolean success, PerformanceTrackerListener performanceTrackerListener) {
         this.performanceTrackerListener = performanceTrackerListener;
         this.reqIdPerformanceTracker = generateRequestId();
         HashMap hashMap = new HashMap();
-        hashMap.put("user-id", userId);
+        String userId = LocalStorage.getInstance().getStringData(context, "user_id");
+
+        hashMap.put("user_id", userId);
         hashMap.put("alphabet", alphabet);
         hashMap.put("success", success);
 
         Log.e("ApiManager", "performanceTracking HashMAp::" + hashMap.toString());
-        apiHandler.httpRequest("enter-base-url-here", "enter-url-path-here", "post", reqIdPerformanceTracker, hashMap);
+        apiHandler.httpRequest("https://pattern-triggers-backend.herokuapp.com/", "performance-tracking", "post", reqIdPerformanceTracker, hashMap);
         return reqIdPerformanceTracker;
     }
 
-    public String featureMapping(String userId, String alphabet, String feature, FeatureMappingListener featureMappingListener) {
+    public String featureMapping(String alphabet, String feature, FeatureMappingListener featureMappingListener) {
         this.featureMappingListener = featureMappingListener;
         this.reqIdFeatureMapping = generateRequestId();
         HashMap hashMap = new HashMap();
-        hashMap.put("user-id", userId);
+        String userId = LocalStorage.getInstance().getStringData(context, "user_id");
+
+        hashMap.put("user_id", userId);
         hashMap.put("alphabet", alphabet);
         hashMap.put("feature", feature);
 
         Log.e("ApiManager", "featureMapping HashMAp::" + hashMap.toString());
-        apiHandler.httpRequest("enter-base-url-here", "enter-url-path-here", "post", reqIdFeatureMapping, hashMap);
+        apiHandler.httpRequest("https://pattern-triggers-backend.herokuapp.com/", "feature-mapping", "post", reqIdFeatureMapping, hashMap);
         return reqIdFeatureMapping;
     }
 
