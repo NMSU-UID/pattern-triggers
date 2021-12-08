@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pattern-triggers</string>
+    <string name="app_name">Pattern Triggers</string>
 
     <string name="invalid_json_response">Invalid response</string>
     <string name="invalid_request">Invalid request</string>

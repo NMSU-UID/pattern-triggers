@@ -83,11 +83,13 @@ public class DrawPatternActivity extends ImageActivity implements PopupMenu.OnMe
                 break;
             default:
                 success = false;
-                Toast.makeText(this, "Did not matched with anything", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Did not match with anything", Toast.LENGTH_SHORT).show();
                 break;
         }
 
         callPerformanceTrackingApi(alphabet, success);
+
+        //if(success) finish();;
     }
 
     @Override
